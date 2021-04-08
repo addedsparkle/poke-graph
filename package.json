@@ -1,0 +1,30 @@
+{
+  "name": "poke-graph",
+  "version": "1.0.0",
+  "description": "Example GraphQL server implementation using the open PokeApi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/addedsparkle/poke-graph.git"
+  },
+  "keywords": [
+    "graphql",
+    "pokemon",
+    "apollo-server",
+    "apollo"
+  ],
+  "author": "Jennifer Jensen",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/addedsparkle/poke-graph/issues"
+  },
+  "homepage": "https://github.com/addedsparkle/poke-graph#readme",
+  "dependencies": {
+    "apollo-server": "^2.22.2",
+    "got": "^11.8.2",
+    "graphql": "^15.5.0"
+  }
+}
