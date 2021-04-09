@@ -10,8 +10,18 @@ const typeDefs = gql`
 
   type Type {
     name: String
+    damage_relations: DamageRelations
   }
 
+  type DamageRelations {
+    double_damage_from: [Type]
+    double_damage_to: [Type]
+    half_damage_from: [Type]
+    half_damage_to: [Type]
+    no_damage_from: [Type]
+    no_damage_to: [Type]
+  }
+  
   type Query {
     pokemons: [Pokemon]
     pokemon(name: String!): Pokemon
@@ -24,7 +34,7 @@ const resolvers = {
     pokemon: (parent, {name}) => pokeApi.getPokemonByName(name),
   },
   Pokemon: {
-    types: (parent) => parent.types.map(({type}) => type)
+    types: (parent) => parent.types.map(({type}) => pokeApi.getResource(type.url))
   }
 };
 
