@@ -1,35 +1,25 @@
-const { ApolloServer, gql } = require ('apollo-server');
+const { ApolloServer, gql } = require("apollo-server");
+const pokeApi = require('./pokeApi');
 
 const typeDefs = gql`
-    type Book {
-        title: String
-        author: String
-    }
+  type Pokemon {
+    name: String
+    id: Int
+  }
 
-    type Query {
-        books: [Book]
-    }
+  type Query {
+    pokemon: [Pokemon]
+  }
 `;
 
-const books = [
-    {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-    },
-    { 
-        title: 'City of Glass',
-        author: 'Paul Aster'
-    }
-];
-
 const resolvers = {
-    Query: {
-        books: () => books,
-    }
+  Query: {
+    pokemon: () => pokeApi.getPokemon(),
+  },
 };
 
-const server = new ApolloServer({typeDefs, resolvers});
+const server = new ApolloServer({ typeDefs, resolvers });
 
-server.listen().then(({ url}) => {
-    console.log(`Server ready at ${url}`);
+server.listen().then(({ url }) => {
+  console.log(`Server ready at ${url}`);
 });
