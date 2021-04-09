@@ -8,18 +8,21 @@ const typeDefs = gql`
   }
 
   type Query {
-    pokemon: [Pokemon]
+    pokemons: [Pokemon]
+    pokemon(name: String!): Pokemon
   }
 `;
 
 const resolvers = {
   Query: {
-    pokemon: () => pokeApi.getPokemon(),
+    pokemons: () => pokeApi.getPokemon(),
+    pokemon: (parent, {name}) => pokeApi.getPokemonByName(name),
   },
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen().then(({ url }) => {
+  // eslint-disable-next-line no-console
   console.log(`Server ready at ${url}`);
 });
