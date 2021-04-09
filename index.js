@@ -5,6 +5,11 @@ const typeDefs = gql`
   type Pokemon {
     name: String
     id: Int
+    types: [Type]
+  }
+
+  type Type {
+    name: String
   }
 
   type Query {
@@ -18,6 +23,9 @@ const resolvers = {
     pokemons: () => pokeApi.getPokemon(),
     pokemon: (parent, {name}) => pokeApi.getPokemonByName(name),
   },
+  Pokemon: {
+    types: (parent) => parent.types.map(({type}) => type)
+  }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });

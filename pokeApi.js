@@ -8,5 +8,5 @@ module.exports = {
     return Array.isArray(body.results) ? body.results : [];
   }),
 
-  getPokemonByName: (name) => got(`pokemon/${name}`, {prefixUrl}).then( response => JSON.parse(response.body)).catch( err => {console.log(`pokemon/${name}`); throw err;}),
+  getPokemonByName: (name) => got(`pokemon/${name}`, {prefixUrl}).then( response => JSON.parse(response.body)),
 };
