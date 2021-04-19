@@ -6,11 +6,17 @@ const typeDefs = gql`
     name: String
     id: Int
     types: [Type]
+    sprites: Sprites
+  }
+
+  type Sprites {
+    front_default: String
   }
 
   type Type {
     name: String
     damage_relations: DamageRelations
+    pokemon: [Pokemon]
   }
 
   type DamageRelations {
@@ -21,7 +27,7 @@ const typeDefs = gql`
     no_damage_from: [Type]
     no_damage_to: [Type]
   }
-  
+
   type Query {
     pokemons: [Pokemon]
     pokemon(name: String!): Pokemon
@@ -34,13 +40,17 @@ const resolvers = {
     pokemon: (parent, {name}) => pokeApi.getPokemonByName(name),
   },
   Pokemon: {
-    types: (parent) => parent.types.map(({type}) => pokeApi.getResource(type.url))
+    types: (parent) => parent.types.map(({type}) => type),
+    sprites: (parent) => pokeApi.getResource(parent.url).then(response => response.sprites)
+  },
+  Type: {
+    damage_relations: (parent) => pokeApi.getResource(parent.url).then(response => response.damage_relations),
+    pokemon: (parent) => pokeApi.getResource(parent.url).then(response => response.pokemon.map(({pokemon}) => pokemon))
   }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
 server.listen().then(({ url }) => {
-  // eslint-disable-next-line no-console
   console.log(`Server ready at ${url}`);
 });

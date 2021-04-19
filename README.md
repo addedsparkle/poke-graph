@@ -13,3 +13,4 @@ my-first-pokemon | Schema now features a basic pokemon type and fetches data fro
 hawlucha | Can now get a Pokemon by name
 pokemon-type | get the type of the pokemon using resolver
 double-damage | add the damage relations for the pokemon's type using a further REST call to discover which types cause double damage
+nPlusOne | add the pokemon in the double damage types and fetch their sprites

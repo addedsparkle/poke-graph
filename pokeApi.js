@@ -10,5 +10,8 @@ module.exports = {
 
   getPokemonByName: (name) => got(`pokemon/${name}`, {prefixUrl}).then( response => JSON.parse(response.body)),
 
-  getResource: (url) => got(url).then( response => JSON.parse(response.body)),
+  getResource: (url) => got(url).then( response => { 
+    console.log(`Fetching ${url}`); 
+    return JSON.parse(response.body);
+  }),
 };
