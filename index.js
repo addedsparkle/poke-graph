@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
-const pokeApi = require('./pokeApi');
+const { PokeAPI } = require('./pokeApi');
 
 const typeDefs = gql`
   type Pokemon {
@@ -36,20 +36,29 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    pokemons: () => pokeApi.getPokemon(),
-    pokemon: (parent, {name}) => pokeApi.getPokemonByName(name),
+    pokemons: (_source, _args, {dataSources}) => dataSources.pokeApi.getPokemon(),
+    pokemon: (_source, {name}, {dataSources}) => dataSources.pokeApi.getPokemonByName(name),
   },
   Pokemon: {
-    types: (parent) => parent.types.map(({type}) => type),
-    sprites: (parent) => pokeApi.getResource(parent.url).then(response => response.sprites)
+    types: (_source) => _source.types.map(({type}) => type),
+    sprites: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.sprites)
   },
   Type: {
-    damage_relations: (parent) => pokeApi.getResource(parent.url).then(response => response.damage_relations),
-    pokemon: (parent) => pokeApi.getResource(parent.url).then(response => response.pokemon.map(({pokemon}) => pokemon))
+    damage_relations: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.damage_relations),
+    pokemon: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.pokemon.map(({pokemon}) => pokemon))
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ 
+  typeDefs, 
+  resolvers, 
+  dataSources: () => {
+    return {
+      pokeApi: new PokeAPI()
+    }
+  },
+  tracing: true,
+ });
 
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`);
