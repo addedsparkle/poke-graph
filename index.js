@@ -1,33 +1,21 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql } = require('apollo-server');
 const { PokeAPI } = require('./pokeApi');
-const { TrainerAPI } = require("./trainerApi");
+const { TrainerAPI } = require('./trainerApi');
 
 const typeDefs = gql`
+
   type Pokemon {
     name: String
     id: Int
     types: [Type]
-    sprites: Sprites
     url: String
-  }
-
-  type Sprites {
-    front_default: String
+    image: String
   }
 
   type Type {
     name: String
-    damage_relations: DamageRelations
+    double_damage_from: [Type] 
     pokemon: [Pokemon]
-  }
-
-  type DamageRelations {
-    double_damage_from: [Type]
-    double_damage_to: [Type]
-    half_damage_from: [Type]
-    half_damage_to: [Type]
-    no_damage_from: [Type]
-    no_damage_to: [Type]
   }
 
   type Query {
@@ -65,16 +53,16 @@ const resolvers = {
   },
   Pokemon: {
     types: (_source) => _source.types.map(({type}) => type),
-    sprites: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.sprites)
+    image: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.sprites.front_default)
   },
   Type: {
-    damage_relations: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.damage_relations),
+    double_damage_from: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.damage_relations.double_damage_from),
     pokemon: (_source, _args, {dataSources}) => dataSources.pokeApi.getResource(_source.url).then(response => response.pokemon.map(({pokemon}) => pokemon))
   }
 };
 
 const server = new ApolloServer({ 
-  typeDefs, 
+  typeDefs,
   resolvers, 
   dataSources: () => {
     return {
