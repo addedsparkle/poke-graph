@@ -17,6 +17,7 @@ class PokeAPI extends RESTDataSource {
   async getResource(url) {
     return this.get(url);
   }
+
 };
 
 module.exports = { PokeAPI };
