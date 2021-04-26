@@ -23,4 +23,4 @@ class TrainerAPI {
     }
 }
 
-module.exports = { TrainerAPI };
+module.exports = TrainerAPI;
