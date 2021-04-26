@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server');
-const { PokeAPI } = require('./pokeApi');
+const PokeAPI = require('./pokeApi');
 
 const typeDefs = gql`
 
