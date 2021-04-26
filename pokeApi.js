@@ -1,12 +1,17 @@
-const got = require("got");
+const got = require('got');
+const prefixUrl = "https://pokeapi.co/api/v2";
 
-const prefixUrl = "https://pokeapi.co/api/v2/";
+class PokeAPI {
 
-module.exports = {
-  getPokemon: () => {
-    return got("pokemon", { prefixUrl }).then((response) => {
-      const body = JSON.parse(response.body);
-      return Array.isArray(body.results) ? body.results : [];
+  async get(url) {
+    return got(url).then((response) => JSON.parse(response.body))
+  }
+
+  async getPokemon () {
+    return this.get(`${prefixUrl}/pokemon`).then((response) => {
+      return Array.isArray(response.results) ? response.results : [];
     });
-  },
+  }
 };
+
+module.exports = { PokeAPI };
