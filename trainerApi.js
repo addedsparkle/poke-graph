@@ -3,7 +3,7 @@ class TrainerAPI {
     constructor() {
         this.trainerInfo = { 'jennifer' : {
             name: 'jennifer',
-            pokemon: [{ name:'pikachu', url: 'https://pokeapi.co/api/v2/pokemon/25'}]
+            pokemon: [{ name:'charmander', url: 'https://pokeapi.co/api/v2/pokemon/4'}]
         }}
     }
 

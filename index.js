@@ -1,44 +1,16 @@
-const { ApolloServer, gql, SchemaDirectiveVisitor } = require('apollo-server');
-const { defaultFieldResolver, GraphQLString } = require('graphql');
+const { ApolloServer, gql } = require('apollo-server');
 const { PokeAPI } = require('./pokeApi');
 const { TrainerAPI } = require('./trainerApi');
 
-class ifInVersionDirective extends SchemaDirectiveVisitor {
-  visitFieldDefinition(field) {
-    const { resolve = defaultFieldResolver } = field;
-    field.args.push({
-      name: 'version',
-      type: GraphQLString
-    });
-    field.resolve = async function (source, {version, ...otherArgs}, context, info) {
-      const pokemonList = await resolve.call(this, source, otherArgs, context, info);
-      return version ? pokemonList.filter( pokemon => pokemon.game_indices && pokemon.game_indices.find(gameIndex => gameIndex.version.name === version)) : pokemonList;
-    };
-  }
-};
-
 const typeDefs = gql`
-
-  directive @ifInVersion(version: String) on FIELD_DEFINITION
-
   type Pokemon {
     name: String
     id: Int
     types: [Type]
     url: String
     image: String
-    game_indices: [GameIndex] 
   }
 
-  type GameIndex {
-    game_index: Int
-    version: Version
-  }
-
-  type Version {
-    name: String
-    url: String
-  }
   type Type {
     name: String
     double_damage_from: [Type] 
@@ -47,7 +19,7 @@ const typeDefs = gql`
     half_damage_to: [Type]
     no_damage_from: [Type]
     no_damage_to: [Type]
-    pokemon: [Pokemon] @ifInVersion
+    pokemon: [Pokemon] 
   }
 
   type Query {
@@ -99,16 +71,16 @@ const resolvers = {
   }
 };
 
+const pokeApi = new PokeAPI();
+const trainerApi = new TrainerAPI();
+
 const server = new ApolloServer({ 
   typeDefs,
-  schemaDirectives: {
-    ifInVersion: ifInVersionDirective
-  },
   resolvers, 
   dataSources: () => {
     return {
-      pokeApi: new PokeAPI(),
-      trainerApi: new TrainerAPI()
+      pokeApi,
+      trainerApi
     }
   },
   tracing: true,
