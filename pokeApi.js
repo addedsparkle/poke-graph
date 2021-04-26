@@ -14,4 +14,4 @@ class PokeAPI {
   }
 };
 
-module.exports = { PokeAPI };
+module.exports = PokeAPI;

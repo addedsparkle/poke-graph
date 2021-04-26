@@ -1,5 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
-const pokeApi = require('./pokeApi');
+const PokeApi = require('./pokeApi');
 
 const typeDefs = gql`
   type Pokemon {
@@ -8,13 +8,15 @@ const typeDefs = gql`
   }
 
   type Query {
-    pokemon: [Pokemon]
+    pokemons: [Pokemon]
   }
 `;
 
+const pokeApi = new PokeApi();
+
 const resolvers = {
   Query: {
-    pokemon: () => pokeApi.getPokemon(),
+    pokemons: () => pokeApi.getPokemon(),
   },
 };
 
