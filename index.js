@@ -73,13 +73,16 @@ const resolvers = {
   }
 };
 
+const trainerApi = new TrainerAPI();
+const pokeApi = new PokeAPI();
+
 const server = new ApolloServer({ 
   typeDefs,
   resolvers, 
   dataSources: () => {
     return {
-      pokeApi: new PokeAPI(),
-      trainerApi: new TrainerAPI()
+      pokeApi,
+      trainerApi
     }
   },
   tracing: true,
