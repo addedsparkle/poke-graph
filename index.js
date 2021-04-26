@@ -1,5 +1,4 @@
-const { ApolloServer, gql, SchemaDirectiveVisitor } = require('apollo-server');
-const { defaultFieldResolver, GraphQLString } = require('graphql');
+const { ApolloServer, gql } = require('apollo-server');
 const { PokeAPI } = require('./pokeApi');
 
 const typeDefs = gql`
