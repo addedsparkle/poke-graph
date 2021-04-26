@@ -20,4 +20,4 @@ class PokeAPI extends RESTDataSource {
 
 };
 
-module.exports = { PokeAPI };
+module.exports = PokeAPI;
