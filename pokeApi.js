@@ -1,8 +1,11 @@
-const { RESTDataSource } = require("apollo-datasource-rest");
-
+const got = require('got');
 const prefixUrl = "https://pokeapi.co/api/v2";
 
-class PokeAPI extends RESTDataSource {
+class PokeAPI {
+
+  async get(url) {
+    return got(url).then((response) => JSON.parse(response.body))
+  }
 
   async getPokemon () {
     return this.get(`${prefixUrl}/pokemon`).then((response) => {
