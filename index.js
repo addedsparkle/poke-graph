@@ -1,7 +1,7 @@
 const { ApolloServer, gql, SchemaDirectiveVisitor } = require('apollo-server');
 const { defaultFieldResolver, GraphQLString } = require('graphql');
-const { PokeAPI } = require('./pokeApi');
-const { TrainerAPI } = require('./trainerApi');
+const PokeAPI = require('./pokeApi');
+const TrainerAPI = require('./trainerApi');
 
 class ifInVersionDirective extends SchemaDirectiveVisitor {
   visitFieldDefinition(field) {
@@ -73,7 +73,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addPokemons(name: String, pokemon: [PokemonInput]): TrainerUpdateResponse
+    addTrainerPokemon(name: String, pokemon: [PokemonInput]): TrainerUpdateResponse
   }
 `;
 
@@ -84,7 +84,7 @@ const resolvers = {
     trainer: (_source, {name}, {dataSources}) => dataSources.trainerApi.getTrainer(name),
   },
   Mutation: {
-    addPokemons: async (_source, {name, pokemon}, {dataSources}) => dataSources.trainerApi.addPokemon(name, pokemon),
+    addTrainerPokemon: async (_source, {name, pokemon}, {dataSources}) => dataSources.trainerApi.addPokemon(name, pokemon),
   },
   Pokemon: {
     types: (_source, _args, {dataSources}) => Promise.all(_source.types.map(({type}) => dataSources.pokeApi.getResource(type.url))),
