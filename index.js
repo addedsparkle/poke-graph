@@ -39,6 +39,7 @@ const typeDefs = gql`
     name: String
     url: String
   }
+
   type Type {
     name: String
     double_damage_from: [Type] 
@@ -80,6 +81,7 @@ const resolvers = {
   Query: {
     pokemons: (_source, _args, {dataSources}) => dataSources.pokeApi.getPokemon(),
     pokemon: (_source, {name}, {dataSources}) => dataSources.pokeApi.getPokemonByName(name),
+    trainer: (_source, {name}, {dataSources}) => dataSources.trainerApi.getTrainer(name),
   },
   Mutation: {
     addPokemons: async (_source, {name, pokemon}, {dataSources}) => dataSources.trainerApi.addPokemon(name, pokemon),
@@ -99,6 +101,9 @@ const resolvers = {
   }
 };
 
+const pokeApi = new PokeAPI();
+const trainerApi = new TrainerAPI();
+
 const server = new ApolloServer({ 
   typeDefs,
   schemaDirectives: {
@@ -107,8 +112,8 @@ const server = new ApolloServer({
   resolvers, 
   dataSources: () => {
     return {
-      pokeApi: new PokeAPI(),
-      trainerApi: new TrainerAPI()
+      pokeApi,
+      trainerApi
     }
   },
   tracing: true,
