@@ -12,7 +12,7 @@ class ifInVersionDirective extends SchemaDirectiveVisitor {
     });
     field.resolve = async function (source, {version, ...otherArgs}, context, info) {
       const pokemonList = await resolve.call(this, source, otherArgs, context, info);
-      return pokemonList.filter( pokemon => pokemon.game_indices && pokemon.game_indices.find(gameIndex => gameIndex.version.name === version));
+      return version ? pokemonList.filter( pokemon => pokemon.game_indices && pokemon.game_indices.find(gameIndex => gameIndex.version.name === version)) : pokemonList;
     };
   }
 };
