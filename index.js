@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server');
-const { PokeAPI } = require('./pokeApi');
-const { TrainerAPI } = require('./trainerApi');
+const PokeAPI = require('./pokeApi');
+const TrainerAPI = require('./trainerApi');
 
 const typeDefs = gql`
 
@@ -45,7 +45,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addPokemons(name: String, pokemon: [PokemonInput]): TrainerUpdateResponse
+    addTrainerPokemon(name: String, pokemon: [PokemonInput]): TrainerUpdateResponse
   }
 `;
 
@@ -55,7 +55,7 @@ const resolvers = {
     pokemon: (_source, {name}, {dataSources}) => dataSources.pokeApi.getPokemonByName(name),
   },
   Mutation: {
-    addPokemons: async (_source, {name, pokemon}, {dataSources}) => dataSources.trainerApi.addPokemon(name, pokemon),
+    addTrainerPokemon: async (_source, {name, pokemon}, {dataSources}) => dataSources.trainerApi.addPokemon(name, pokemon),
   },
   Pokemon: {
     types: (_source, _args, {dataSources}) => Promise.all(_source.types.map(({type}) => dataSources.pokeApi.getResource(type.url))),
